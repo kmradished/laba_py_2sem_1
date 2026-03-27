@@ -30,7 +30,7 @@ python3 main.py
 
 ### Запуск тестов
 ```bash
-python3 -m pytest tests/
+python3 -m pytest tests/test.py -v
 ```
 
 ## Структура проекта
