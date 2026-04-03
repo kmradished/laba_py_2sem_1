@@ -12,9 +12,9 @@ from src.processors.task_processor import TaskProcessor
 @pytest.fixture
 def temp_file():
     with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', delete=False) as f:
-        f.write("задача 1\n")
-        f.write("задача 2\n")
-        f.write("задача 3\n")
+        f.write("1, задача 1\n")
+        f.write("2, задача 2\n")
+        f.write("3, задача 3\n")
         path = f.name
     yield path
     os.unlink(path)
@@ -42,6 +42,9 @@ def test_file_source_reads_file(temp_file):
     source = FileSource(temp_file)
     tasks = source.get_tasks()
     assert len(tasks) == 3
+    assert tasks[0].id == "1"
+    assert tasks[1].id == "2"
+    assert tasks[2].id == "3"
     assert tasks[0].payload == "задача 1"
     assert tasks[1].payload == "задача 2"
     assert tasks[2].payload == "задача 3"
@@ -55,7 +58,6 @@ def test_file_source_not_found():
 
 
 def test_generator_source_default():
-
     source = Generate()
     tasks = source.get_tasks()
     assert 1 <= len(tasks) <= 10
@@ -79,14 +81,6 @@ def test_api_source():
     assert tasks[0].id == "1"
     assert tasks[0].payload == "Помыть посуду"
 
-
-def test_api_source_with_name():
-    source = ApiSource("weather")
-    assert source.name == "weather"
-    tasks = source.get_tasks()
-    assert len(tasks) == 3
-
-
 def test_processor_with_valid_source(processor):
     source = Generate(2)
     processor.process(source)
@@ -96,8 +90,7 @@ def test_processor_with_invalid_source(processor):
     processor.process("строка")
 
 
-def test_processor_output(capsys):
-    processor = TaskProcessor()
+def test_processor_output(capsys, processor):
     source = Generate(2)
     processor.process(source)
     captured = capsys.readouterr()

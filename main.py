@@ -13,7 +13,7 @@ def main() -> None:
     gen_source = Generate(5)
     processor.process(gen_source)
 
-    api_source = ApiSource("demo_api")
+    api_source = ApiSource()
     processor.process(api_source)
 
 

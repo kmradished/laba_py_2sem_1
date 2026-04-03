@@ -3,8 +3,7 @@ from typing import List, Dict, Any
 
 
 class ApiSource:
-    def __init__(self, name: str = "default") -> None:
-        self.name = name
+    def __init__(self) -> None:
         self._data: List[Dict[str, Any]] = [
             {"id": 1, "text": "Помыть посуду"},
             {"id": 2, "text": "Сходить в магазин"},

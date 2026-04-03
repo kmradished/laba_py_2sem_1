@@ -10,11 +10,15 @@ class FileSource:
         try:
             with open(self.filepath, 'r', encoding='utf-8') as file:
                 tasks: List[Task] = []
-                for line_number, line in enumerate(file, start=1):
-                    line = line.strip()
-                    if line:
-                        tasks.append(Task(str(line_number), line))
+                for line in file:
+                    parts = line.strip().split(',')
+                    if len(parts) != 2:
+                        print(f"Неверный формат строки: {line.strip()}. Ожидается 2 части, разделённые запятыми.'")
+                        continue
+                    task = Task(id=parts[0].strip(), payload=parts[1].strip())
+                    tasks.append(task)
                 return tasks
+            
         except FileNotFoundError:
             print(f"Файл {self.filepath} не найден. Возвращаю тестовые задачи.")
             return [
